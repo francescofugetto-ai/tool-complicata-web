@@ -1,0 +1,556 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tool Complicata">
+<meta name="theme-color" content="#FAF9F7">
+<script data-iphone="sentinella">
+(function(){
+var h=document.documentElement, msg="";
+function ha(c){ return (" "+h.className+" ").indexOf(" "+c+" ")>=0; }
+// L'errore puo' arrivare prima che l'avviso esista — uno script in <head> che
+// non si lascia leggere —: il messaggio si tiene da parte e si scrive quando
+// la pagina c'e'.
+function scrivi(){
+  var e=document.getElementById("nmerr");
+  if(e&&msg) e.textContent="Errore del motore: "+msg;
+}
+function ko(m){
+  if(m&&!msg) msg=m;
+  if(!ha("motore-ko")) h.className+=" motore-ko";
+  scrivi();
+}
+h.className+=" js";
+window.onerror=function(m,src,riga,col){
+  m=String(m);
+  if(/^Script error\.?$/.test(m)) m="il browser non ne mostra il dettaglio (\u00abScript error.\u00bb)";
+  ko(m+(riga?" (riga "+riga+(col?", colonna "+col:"")+")":""));
+};
+document.addEventListener("DOMContentLoaded",function(){
+  if(!ha("motore-ok")) ko(msg||"il motore non ha completato l'avvio"); else scrivi();
+});
+})();
+</script>
+<title>Pericardite complicata e recidive — punteggio investigazionale</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#FAF9F7; --surface:#FFFFFF; --surface-alt:#F3F2EF;
+    --border:rgba(11,11,11,0.10); --border-strong:rgba(11,11,11,0.18);
+    --text-primary:#0B0B0B; --text-secondary:#52514E; --text-muted:#76746F;
+    --accent-blue:#2A78D6;   --accent-blue-bg:#E6F1FB;   --accent-blue-border:#B5D4F4;
+    --accent-amber:#BA7517;  --accent-amber-bg:#FAEEDA;  --accent-amber-border:#FAC775;
+    --accent-red:#A32D2D;    --accent-red-bg:#FCEBEB;    --accent-red-border:#F7C1C1;
+    --accent-green:#3B6D11;  --accent-green-bg:#EAF3DE;  --accent-green-border:#C0DD97;
+    --cor-1:#3B8E5A; --cor-2a:#E0A82E; --cor-2b:#DE7E3C; --cor-3:#B33A3A;
+    --k0:#2E7D4F; --k0-bg:#E2F3E8; --k0-bd:#A6D9B8;
+    --k1:#2A78D6; --k1-bg:#E3EFFB; --k1-bd:#A9CBF1;
+    --k2:#8A6A00; --k2-bg:#FBF3C8; --k2-bd:#EBD56C;
+    --k3:#B45309; --k3-bg:#FDEBD8; --k3-bd:#F4BD85;
+    --k4:#A32D2D; --k4-bg:#FCE3E3; --k4-bd:#F0A9A9;
+    --grid:rgba(42,120,214,.08);
+    --font:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --display:'IBM Plex Sans Condensed','Arial Narrow',-apple-system,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,Consolas,'Courier New',monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#111418; --surface:#181C22; --surface-alt:#20252D;
+      --border:rgba(255,255,255,.10); --border-strong:rgba(255,255,255,.19);
+      --text-primary:#E7EAEE; --text-secondary:#B8BEC7; --text-muted:#949BA5;
+      --accent-blue:#72AAEE;   --accent-blue-bg:#18283A;   --accent-blue-border:#2E4B6C;
+      --accent-amber:#E3A94F;  --accent-amber-bg:#30250F;  --accent-amber-border:#5D4719;
+      --accent-red:#EF8E8E;    --accent-red-bg:#361B1B;    --accent-red-border:#6B3232;
+      --accent-green:#95C873;  --accent-green-bg:#1C2A13;  --accent-green-border:#3C5626;
+      --k0:#8FD3A8; --k0-bg:#132B1D; --k0-bd:#2D5A3E;
+      --k1:#8EC0F5; --k1-bg:#16283C; --k1-bd:#2F5378;
+      --k2:#EDD36A; --k2-bg:#2C260C; --k2-bd:#5E5120;
+      --k3:#F3B27A; --k3-bg:#33210F; --k3-bd:#6B4524;
+      --k4:#F29A9A; --k4-bg:#361B1B; --k4-bd:#6B3232;
+      --grid:rgba(114,170,238,.07);
+      color-scheme:dark;
+    }
+  }
+  body { font-family:var(--font); background:var(--bg); color:var(--text-primary); font-size:14.5px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .page { max-width:960px; margin:0 auto; padding:0 16px 4rem; }
+  strong, b { font-weight:600; }
+  .muted { color:var(--text-muted); }
+  .hero { margin:0 -16px 0; padding:2.2rem 16px 1.3rem; border-bottom:1px solid var(--border);
+          background-color:var(--bg);
+          background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+          background-size:22px 22px; }
+  .kicker { font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-blue); margin-bottom:8px; }
+  .headline { font-family:var(--display); font-size:30px; font-weight:700; line-height:1.12; margin-bottom:10px; }
+  .lede { font-size:14.5px; color:var(--text-secondary); max-width:760px; margin-bottom:12px; }
+  .lede strong { color:var(--text-primary); }
+  .meta-row { display:flex; flex-wrap:wrap; gap:6px 8px; font-size:12px; }
+  .meta-chip { background:var(--surface); border:1px solid var(--border-strong); border-radius:99px; padding:2px 10px; color:var(--text-secondary); overflow-wrap:anywhere; }
+  .meta-chip strong { color:var(--text-primary); }
+  .bar { position:-webkit-sticky; position:-webkit-sticky;position:sticky; top:0; z-index:30; background:var(--bg); border-bottom:1px solid var(--border-strong);
+         margin:0 -16px 1.2rem; padding:8px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; }
+  .bar .lbl { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+  .bar .sp { flex:1 1 auto; }
+  .btn { font:600 12.5px var(--font); padding:6px 13px; border-radius:99px; border:1px solid var(--border-strong); background:var(--surface); color:var(--text-secondary); cursor:pointer; }
+  .btn:hover { border-color:var(--accent-blue); color:var(--accent-blue); }
+  .stage { display:flex; align-items:baseline; gap:10px; margin:2rem 0 .7rem; padding-bottom:6px; border-bottom:2px solid var(--border-strong); }
+  .stage-n { font-family:var(--mono); font-size:12px; font-weight:600; color:#FFFFFF; background:var(--accent-blue); border-radius:6px; padding:1px 7px; }
+  .stage-t { font-family:var(--display); font-size:20px; font-weight:700; line-height:1.2; }
+  .stage-w { margin-left:auto; font-size:11.5px; color:var(--text-muted); text-align:right; }
+  .card { background:var(--surface); border:1px solid var(--border-strong); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .card h3 { font-size:13px; font-weight:600; letter-spacing:.02em; margin-bottom:8px; color:var(--text-secondary); }
+  .card h3 .sub { float:right; font-family:var(--mono); font-size:12px; color:var(--text-primary); }
+  .row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-bottom:10px; }
+  .row:last-child { margin-bottom:0; }
+  .fl { font-size:12.5px; font-weight:600; color:var(--text-secondary); min-width:150px; }
+  .fl small { display:block; font-weight:400; color:var(--text-muted); font-size:11.5px; }
+  input[type=number] { font:500 15px var(--font); color:var(--text-primary); background:var(--surface); border:1px solid var(--border-strong); border-radius:8px; padding:6px 9px; width:92px; text-align:center; }
+  .seg { display:inline-flex; flex-wrap:wrap; border:1px solid var(--border-strong); border-radius:10px; overflow:hidden; }
+  .seg label { position:relative; cursor:pointer; }
+  .seg input { position:absolute; opacity:0; width:1px; height:1px; }
+  .seg span { display:block; padding:6px 12px; font-size:13.5px; font-weight:500; color:var(--text-secondary); border-right:1px solid var(--border); }
+  .seg label:last-child span { border-right:none; }
+  .seg input:checked + span { background:var(--text-primary); color:var(--bg); }
+  .seg input:focus-visible + span { outline:2px solid var(--accent-blue); outline-offset:-2px; }
+  .chk { display:flex; align-items:flex-start; gap:9px; padding:6px 0; font-size:14px; line-height:1.45; border-bottom:1px dashed var(--border); cursor:pointer; }
+  .chk:last-child { border-bottom:none; }
+  .chk input { margin-top:3px; width:17px; height:17px; flex:0 0 auto; accent-color:var(--accent-blue); }
+  .chk small { display:block; color:var(--text-muted); font-size:12px; }
+  .chk .tx { flex:1 1 auto; min-width:0; }
+  .pt { flex:0 0 auto; margin-left:auto; font-family:var(--mono); font-size:12.5px; font-weight:600; color:var(--text-secondary); white-space:nowrap; }
+  .pt.neg { color:var(--k0); }
+  .riga { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; padding:6px 0; border-bottom:1px dashed var(--border); }
+  .riga .fl { min-width:0; flex:1 1 180px; }
+  .hide { display:none !important; }
+  .esito { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:4px; }
+  .cat { display:inline-block; font-size:12.5px; font-weight:600; border-radius:99px; padding:2px 10px; border:1px solid; }
+  .k0 { color:var(--k0); background:var(--k0-bg); border-color:var(--k0-bd); }
+  .k1 { color:var(--k1); background:var(--k1-bg); border-color:var(--k1-bd); }
+  .k2 { color:var(--k2); background:var(--k2-bg); border-color:var(--k2-bd); }
+  .k3 { color:var(--k3); background:var(--k3-bg); border-color:var(--k3-bd); }
+  .k4 { color:var(--k4); background:var(--k4-bg); border-color:var(--k4-bd); }
+  .kx { color:var(--text-muted); background:var(--surface-alt); border-color:var(--border-strong); }
+  .big { font-family:var(--display); font-size:26px; font-weight:700; line-height:1.15; }
+  .cor { display:inline-block; font-family:var(--mono); font-size:11px; font-weight:600; color:#FFFFFF; border-radius:4px; padding:0 5px; margin:0 1px; white-space:nowrap; vertical-align:1px; }
+  .c1 { background:var(--cor-1); } .c2a { background:var(--cor-2a); color:#1D1602; } .c2b { background:var(--cor-2b); } .c3 { background:var(--cor-3); }
+  .pg { font-family:var(--mono); font-size:11px; color:var(--text-muted); }
+  .dv { font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.03em; color:var(--accent-red); background:var(--accent-red-bg); border:1px solid var(--accent-red-border); border-radius:4px; padding:0 5px; white-space:nowrap; }
+  .nota { border-left:3px solid var(--accent-amber); background:var(--accent-amber-bg); border-radius:0 8px 8px 0; padding:7px 11px; margin-top:8px; font-size:13.5px; }
+  .nota.info { border-left-color:var(--accent-blue); background:var(--accent-blue-bg); }
+  .nota.stop { border-left-color:var(--accent-red); background:var(--accent-red-bg); }
+  .nota.ok { border-left-color:var(--accent-green); background:var(--accent-green-bg); }
+  .nota.spenta { border-left-color:var(--border-strong); background:var(--surface-alt); color:var(--text-secondary); }
+  .nota strong { color:var(--text-primary); }
+  .passo { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); }
+  .passo:last-child { border-bottom:none; }
+  .passo .ico { flex:0 0 26px; font-weight:700; text-align:center; font-family:var(--mono); font-size:13px; padding-top:1px; }
+  .passo .tx { flex:1 1 auto; font-size:14px; min-width:0; overflow-wrap:anywhere; }
+  .passo.att { background:var(--accent-blue-bg); border-radius:8px; border-bottom-color:transparent; padding:8px 8px; margin:2px -8px; }
+  .passo.att .ico { color:var(--accent-blue); }
+  .passo.esc .ico { color:var(--text-muted); }
+  .passo.esc .tx { color:var(--text-muted); }
+  .lista li { margin:4px 0 4px 18px; font-size:13.5px; }
+  .tab { width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+  .tab th, .tab td { text-align:left; padding:5px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .tab th { font-size:11.5px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.04em; }
+  .tab td.n { font-family:var(--mono); white-space:nowrap; }
+  .ck { display:flex; gap:8px; font-size:13.5px; padding:3px 0; }
+  .ck .s { flex:0 0 18px; font-weight:700; text-align:center; }
+  .ck .s.si { color:var(--k4); } .ck .s.no { color:var(--k1); }
+  .foot { margin-top:2.4rem; padding-top:1rem; border-top:1px solid var(--border-strong); font-size:12px; color:var(--text-muted); line-height:1.7; }
+  .foot strong { color:var(--text-secondary); }
+  @media (max-width:640px) {
+    .headline { font-size:25px; }
+    .stage-w { display:none; }
+    .fl { min-width:0; width:100%; }
+    .big { font-size:22px; }
+    .tab { font-size:12px; }
+  }
+  .chk.on .tx { color:var(--text-primary); }
+  .chk.on .tx > b, .chk.on .tx { font-weight:500; }
+  @media print { .bar { position:static; } }
+</style>
+<style data-iphone="stile">
+/* L'avviso e' visibile per costruzione: lo nasconde solo la classe che la
+   sentinella mette quando JavaScript esiste, e lo rimostra quando il motore
+   muore. Nell'anteprima dell'iPhone nessuna delle due arriva. */
+#nomotore{background:#FCEBEB;border:1.5px solid #A32D2D;border-radius:10px;
+ padding:12px 15px;margin:0 0 1.1rem;font-size:13.5px;line-height:1.6;color:#0B0B0B;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+#nomotore strong{display:block;color:#A32D2D;font-size:15px;margin-bottom:4px}
+#nomotore p{margin:6px 0 0}
+#nomotore a{color:#A32D2D}
+#nomotore .nmurl{font-family:'SFMono-Regular',Consolas,Menlo,monospace;font-size:.92em;word-break:break-all}
+#nomotore .nmerr{display:block;font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+ font-size:11.5px;color:#A32D2D;margin-top:6px;word-break:break-word}
+#nomotore .nmerr:empty{display:none}
+html.js #nomotore{display:none}
+html.js.motore-ko #nomotore{display:block}
+
+#nmprivacy{background:#E2F4F5;border:1px solid #A7DBDE;border-radius:8px;padding:9px 13px;
+ margin:0 0 1rem;font-size:12.5px;line-height:1.55;color:#0B0B0B;
+ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+@media print{#nmprivacy{display:none}}
+</style>
+</head>
+<body>
+<div class="nomotore" id="nomotore" role="alert">
+ <strong>Motore di calcolo non attivo</strong>
+ <p>I calcoli, i filtri e i comandi di questa pagina <b>non funzionano</b>: dove leggi «—» non c'è un
+ valore. Il testo resta leggibile, i numeri che dipendono dai tuoi dati no. Non usare questa pagina
+ per decidere una dose.</p>
+ <p>Su iPhone e iPad succede sempre con un file salvato sul telefono: si apre nell'<b>anteprima</b> —
+ dall'app File, da Mail, da WhatsApp —, che mostra la pagina ma non esegue il motore, e Apple non
+ permette di aprirlo in Safari. Sull'iPhone il tool funziona aperto da questo indirizzo, in Safari: <a class="nmurl" href="https://francescofugetto-ai.github.io/tool-complicata-web/">https://francescofugetto-ai.github.io/tool-complicata-web/</a> — poi Condividi, «Aggiungi alla schermata Home». Dopo la prima apertura funziona anche senza rete. Su computer e Android basta aprire il file.</p>
+ <span class="nmerr" id="nmerr"></span>
+</div>
+<div class="nmprivacy" id="nmprivacy">
+ <b>Quello che scrivi resta su questo dispositivo.</b> La pagina non invia niente in rete e non
+ salva niente: nessun dato esce da qui. Per la stessa ragione, <b>chiudendola il contenuto si
+ perde</b> — copia il referto dove ti serve prima di chiudere.
+</div>
+<div class="page">
+<header class="hero">
+  <div class="kicker">Strumento · Pericardite e miocardite · ESC 2025, supplementare</div>
+  <h1 class="headline">Pericardite complicata e recidive — un punteggio da prendere con le pinze</h1>
+  <p class="lede"><strong>Prima di tutto: i punteggi qui raccolti sono investigazionali.</strong> La linea guida li cita per riconoscere chi rischia una pericardite complicata o cronica e merita un <strong>follow-up ravvicinato</strong>, ma scrive che <strong>non sono stati validati né replicati</strong> in studi più ampi (p. 47). <strong>Come si usa.</strong> Il passo 1 dice il decorso. Il passo 2 segna i cinque fattori della <strong>Tab. S2</strong>, ciascuno col suo peso: ne escono il totale e la classe — ma la classe bassa si legge solo dopo aver confermato che tutti e cinque sono stati valutati. Il passo 3 è un promemoria dei fattori di recidiva della <strong>Tab. S3</strong>, che <strong>non hanno pesi</strong>: lo strumento li conta e non ne fa un punteggio. Poi i fattori di recidiva che il testo dice in chiaro, e il follow-up. <strong>Non calcola dosi.</strong> <strong>Azzera</strong>, in alto, ricomincia.</p>
+  <div class="meta-row">
+    <span class="meta-chip"><strong>Fonte</strong> 2025 ESC Guidelines for the management of myocarditis and pericarditis, e il suo Supplementary data</span>
+    <span class="meta-chip"><strong>Calcolo</strong> Suppl., Tab. S2 e Tab. S3, p. 5 · § 7.2 e Rec. Table 15, p. 47 · Tab. 15, p. 47 · pp. 25, 60</span>
+    <span class="meta-chip"><strong>Stato</strong> investigazionale, non validato (p. 47)</span>
+  </div>
+</header>
+
+<div class="bar" id="bar" aria-live="polite">
+  <span class="lbl">Punti</span> <span id="barPunti" class="cat kx">—</span>
+  <span class="lbl">Classe</span> <span id="barClasse" class="cat kx">—</span>
+  <span class="lbl">S3</span> <span id="barS3" class="cat kx">—</span>
+  <span id="barStato" class="cat k3">investigazionale, non validato</span>
+  <span class="sp"></span>
+  <button class="btn" id="azzera" type="button">Azzera</button>
+</div>
+
+<div class="stage"><span class="stage-n">1</span><span class="stage-t">Il decorso</span><span class="stage-w">§ 11.6, p. 60 · Rec. Table 15, p. 47</span></div>
+<div class="card">
+  <div class="row">
+    <span class="fl">Decorso della pericardite<small>serve al follow-up, non al punteggio</small></span>
+    <span class="seg">
+      <label><input type="radio" name="decorso" value="primo"><span>primo episodio</span></label>
+      <label><input type="radio" name="decorso" value="incessante"><span>incessante</span></label>
+      <label><input type="radio" name="decorso" value="ricorrente"><span>ricorrente</span></label>
+    </span>
+  </div>
+  <p class="muted" style="font-size:12.5px"><b>Incessante:</b> sintomi persistenti senza una remissione netta, compresi la persistenza o il ritorno dei sintomi durante lo scalo dei farmaci. <b>Ricorrente:</b> nuovo episodio dopo un primo episodio documentato, un intervallo libero da sintomi e la sospensione completa degli antinfiammatori <span class="pg">ESC 2025, § 11.6, p. 60</span>.</p>
+</div>
+
+<div class="stage"><span class="stage-n">2</span><span class="stage-t">Pericardite complicata — i cinque fattori</span><span class="stage-w">Suppl., Tab. S2, p. 5</span></div>
+<div class="card">
+  <h3>Fattori di rischio, con il loro peso <span class="sub" id="subS2">—</span></h3>
+  <label class="chk"><input type="checkbox" id="f_donna"><span class="tx">Sesso femminile<small>HR 2,57</small></span><span class="pt">18</span></label>
+  <label class="chk"><input type="checkbox" id="f_febbre"><span class="tx">Febbre oltre 38 °C<small>HR 2,86</small></span><span class="pt">20</span></label>
+  <label class="chk"><input type="checkbox" id="f_nocolch"><span class="tx">Nessun uso precedente di colchicina<small>HR 3,16 · la tabella non precisa come si legga al primo episodio</small></span><span class="pt">22</span></label>
+  <label class="chk"><input type="checkbox" id="f_cs"><span class="tx">Uso precedente di corticosteroidi<small>HR 3,01</small></span><span class="pt">21</span></label>
+  <label class="chk"><input type="checkbox" id="f_costr"><span class="tx">Segni ecocardiografici di costrizione<small>HR 2,26</small></span><span class="pt">16</span></label>
+  <label class="chk" style="margin-top:6px;border-top:1px solid var(--border-strong);padding-top:9px"><input type="checkbox" id="valutati"><span class="tx"><b>Ho valutato tutti e cinque i fattori</b><small>quelli non segnati sono assenti, non sconosciuti: senza questa conferma la classe bassa non si legge</small></span></label>
+  <p class="muted" style="font-size:12px;margin-top:6px">«Pericardite complicata», nella tabella: eziologia non idiopatica, e/o complicanze (recidive, decorso incessante, tamponamento, costrizione), e/o ricovero <span class="pg">ESC 2025 · Suppl., Tab. S2, nota a, p. 5</span>.</p>
+</div>
+<div class="card" id="outPunti"></div>
+
+<div class="stage"><span class="stage-n">3</span><span class="stage-t">Recidiva — promemoria della Tab. S3</span><span class="stage-w">Suppl., Tab. S3, p. 5 — senza pesi</span></div>
+<div class="card">
+  <h3>Predittori «positivi» — quali ci sono? <span class="sub" id="subS3">—</span></h3>
+  <label class="chk"><input type="checkbox" id="r_vci"><span class="tx">Collasso ridotto della vena cava inferiore<small>la fonte non dà una soglia</small></span></label>
+  <label class="chk"><input type="checkbox" id="r_csosp"><span class="tx">Corticosteroidi usati durante il ricovero</span></label>
+  <label class="chk"><input type="checkbox" id="r_fc"><span class="tx">Frequenza cardiaca alta<small>la fonte non dice da quanti battiti</small></span></label>
+  <h3 style="margin-top:12px">Predittori «negativi» — da guardare, non da segnare</h3>
+  <ul class="lista">
+    <li>Età</li>
+    <li>Dimensione del versamento</li>
+    <li>Conta piastrinica</li>
+  </ul>
+  <p class="muted" style="font-size:12.5px">Sono grandezze continue, e la tabella non dice in che verso pesino né con quale soglia: non c'è una casella da spuntare <span class="pg">ESC 2025 · Suppl., Tab. S3, p. 5</span>.</p>
+</div>
+<div class="card" id="outS3"></div>
+
+<div class="stage"><span class="stage-n">4</span><span class="stage-t">Che cosa la linea guida dice in chiaro</span><span class="stage-w">pp. 25, 47, 60 — elenco, non punteggio</span></div>
+<div class="card">
+  <h3>Fattori di recidiva o di cronicità scritti nel testo</h3>
+  <div class="passo"><span class="ico">·</span><span class="tx"><b>Colchicina omessa</b> e <b>corticosteroidi ad alte dosi con scalo rapido</b>: fattori di rischio per recidive o per un decorso cronico <span class="pg">ESC 2025, § 4.4.3, p. 25</span></span></div>
+  <div class="passo"><span class="ico">·</span><span class="tx">Dopo una prima recidiva il rischio di nuove recidive può arrivare al <b>50%</b> se il primo episodio è stato trattato in modo inadeguato — scalo troppo rapido, niente colchicina, corticosteroidi <span class="pg">ESC 2025, § 11.6, p. 60</span></span></div>
+  <div class="passo"><span class="ico">·</span><span class="tx">La recidiva colpisce il <b>20–30%</b> di chi non riceve colchicina; circa il <b>10%</b> ha un decorso incessante, che può portare alla costrizione in pochi mesi <span class="pg">ESC 2025, § 7.2, p. 47</span></span></div>
+  <div class="passo"><span class="ico">·</span><span class="tx">Il rischio di complicanze dipende dall'<b>eziologia</b>: costrizione rara dopo la forma virale o idiopatica, intermedia (2–5%) nelle forme immunomediate, post-danno cardiaco e neoplastiche, alta (20–30%) nella batterica, soprattutto purulenta <span class="pg">ESC 2025, § 7.2, p. 47</span></span></div>
+  <p class="muted" style="font-size:12.5px;margin-top:6px">Questi non si sommano alla Tab. S2 né alla Tab. S3: alcuni coincidono con loro voci (colchicina, corticosteroidi), e contarli due volte sarebbe un errore.</p>
+</div>
+
+<div class="stage"><span class="stage-n">5</span><span class="stage-t">Che cosa fare dopo</span><span class="stage-w">pp. 25, 47 · Rec. Table 15 · Tab. 15</span></div>
+<div class="card" id="outFU"></div>
+<div class="card">
+  <h3>Follow-up dopo la dimissione, pericardite · Tab. 15, p. 47</h3>
+  <p class="muted" style="font-size:12.5px">Vale per ogni pericardite, qualunque sia la classe: la tabella non è legata ai punteggi. ✓ previsto · (✓) caso per caso · – no.</p>
+  <table class="tab" style="table-layout:fixed">
+    <tr><th style="width:34%">Che cosa</th><th>entro 1 mese</th><th>3–6 mesi</th><th>12 mesi</th><th>oltre 1 anno</th></tr>
+    <tr><td>Visita ed ECG</td><td class="n">✓</td><td class="n">✓</td><td class="n">✓</td><td class="n">✓</td></tr>
+    <tr><td>Troponina I e PCR</td><td class="n">✓</td><td class="n">✓</td><td class="n">(✓)</td><td class="n">(✓)</td></tr>
+    <tr><td>Ritmo (sforzo, Holter)</td><td class="n">–</td><td class="n">–</td><td class="n">–</td><td class="n">–</td></tr>
+    <tr><td>Ecocardiogramma</td><td class="n" colspan="2" style="text-align:center;border-left:1px dashed var(--border);border-right:1px dashed var(--border)">✓ <sup>b</sup></td><td class="n">✓ <sup>c</sup></td><td class="n">✓</td></tr>
+    <tr><td>Risonanza cardiaca</td><td class="n" colspan="2" style="text-align:center;border-left:1px dashed var(--border);border-right:1px dashed var(--border)">(✓) <sup>b</sup></td><td class="n">(✓) <sup>d</sup></td><td class="n">(✓) <sup>d</sup></td></tr>
+  </table>
+  <ul class="lista" style="margin-top:6px">
+    <li>Ogni controllo si adatta alla situazione clinica e alla gravità.</li>
+    <li><sup>b</sup> Nei casi complicati, o se anormale a 1 mese, l'imaging si ripete fra 3 e 6 mesi.</li>
+    <li><sup>c</sup> Se anormale a 6 mesi, si ripete nei 6 e/o nei 12 mesi successivi.</li>
+    <li><sup>d</sup> Schema proposto per la pericardite acuta non complicata; nei casi ad alto rischio, follow-up a lungo termine su misura del paziente.</li>
+    <li>Il follow-up oltre l'anno (per esempio dopo 2 anni) è suggerito solo nelle forme complicate, di solito miocarditi <span class="pg">ESC 2025, Tab. 15, nota a, p. 47</span>.</li>
+  </ul>
+</div>
+
+<div class="card"><h3>Incoerenze e ambiguità della fonte</h3><div id="outInc"></div></div>
+<div class="card"><h3>Limiti per questo paziente</h3><ul class="lista" id="limiti"></ul></div>
+
+<div class="foot">
+  <strong>Fonte.</strong> Schulz-Menger J, Collini V, Gröschel J, et al. 2025 ESC Guidelines for the management of myocarditis and pericarditis. <em>Eur Heart J</em> 2025, doi:10.1093/eurheartj/ehaf192, e il suo Supplementary data — fattori di rischio della pericardite complicata (Suppl., Tab. S2, p. 5, dal Torino Pericarditis Score, Imazio 2021), fattori di recidiva (Suppl., Tab. S3, p. 5, da Lazarou 2021), complicanze ed esiti (§ 7.2, Rec. Table 15 e Tab. 15, p. 47), pericardite subacuta e cronica (§ 4.4.3, p. 25), pericardite incessante e ricorrente (§ 11.6, p. 60). Ogni numero mostrato porta la pagina.<br><br>
+  Strumento personale di studio e consultazione: <strong>non sostituisce il giudizio clinico</strong>. I punteggi sono <strong>investigazionali, non validati né replicati</strong> in studi più ampi (p. 47): la classe è un'informazione, non una decisione. Non calcola dosi. Non salva i dati e non li invia in rete.
+</div>
+
+</div>
+<script>
+(function () {
+  "use strict";
+
+  /* ═══ DATI ═══════════════════════════════════════════════════════════════
+     2025 ESC Guidelines for the management of myocarditis and pericarditis,
+     Supplementary data.
+     Tab. S2, p. 5 (letta sull'immagine della pagina, cella per cella) —
+       fattori di rischio della pericardite complicata (rif. 1 del
+       supplementare: Torino Pericarditis Score, Imazio 2021) e punti:
+       sesso femminile 18 (HR 2.57); febbre >38 °C 20 (HR 2.86); mancato
+       uso precedente di colchicina 22 (HR 3.16); uso precedente di
+       corticosteroidi 21 (HR 3.01); segni eco di costrizione 16 (HR 2.26).
+       Nota: classe <20 punti = basso rischio, 21%; 21-40 = intermedio;
+       >40 = alto rischio, 75%. Esattamente 20 punti: nessuna classe.
+       Nota a: complicata = eziologia non idiopatica e/o complicanze
+       (recidive, incessante, tamponamento, costrizione) e/o ricovero.
+     Tab. S3, p. 5 — fattori di recidiva (rif. 2: Lazarou 2021), senza pesi:
+       predittori negativi eta', dimensione del versamento, piastrine;
+       positivi collasso ridotto della VCI, corticosteroidi in ospedale,
+       frequenza cardiaca alta.
+     Testo principale, § 7.2, p. 47 — almeno tre punteggi (rif. 43, 44, 348)
+       per i pazienti a rischio di pericardite complicata e cronicita', che
+       richiedono follow-up ravvicinato (Tab. S2 e S3); non validati ne'
+       replicati in studi piu' ampi: investigazionali.
+     Rec. Table 15, p. 47 — follow-up a lungo termine nella pericardite
+       incessante o ricorrente, I C.
+     § 4.4.3, p. 25 — punteggi per chi richiede terapia intensiva (dose e
+       durata) e follow-up ravvicinato; richiedono ulteriore validazione. */
+  var S2 = [
+    // [id, etichetta, punti] — Suppl., Tab. S2, p. 5
+    ["f_donna",   "sesso femminile", 18],
+    ["f_febbre",  "febbre oltre 38 °C", 20],
+    ["f_nocolch", "nessun uso precedente di colchicina", 22],
+    ["f_cs",      "uso precedente di corticosteroidi", 21],
+    ["f_costr",   "segni eco di costrizione", 16]
+  ];
+  var CLASSI = {                     // Suppl., Tab. S2, nota, p. 5
+    bassoSotto: 20,                  // «<20 punti = basso rischio: 21%»
+    intermedio: [21, 40],            // «21–40 punti = rischio intermedio»
+    altoSopra: 40,                   // «>40 punti = alto rischio: 75%»
+    pBasso: "21%", pAlto: "75%"      // come scritte; per l'intermedio la tabella non ne da'
+  };
+  var S3POS = [
+    // Suppl., Tab. S3, p. 5 — predittori «positivi», senza pesi ne' soglie
+    ["r_vci",   "collasso ridotto della vena cava inferiore"],
+    ["r_csosp", "corticosteroidi durante il ricovero"],
+    ["r_fc",    "frequenza cardiaca alta"]
+  ];
+  var S3NEG = ["età", "dimensione del versamento", "conta piastrinica"]; // Tab. S3, p. 5
+
+  /* ═══ FUNZIONI PURE ═══════════════════════════════════════════════════ */
+  function punteggio(ck) {
+    var t = 0, voci = [], i;
+    for (i = 0; i < S2.length; i++) if (ck[S2[i][0]]) { t += S2[i][2]; voci.push({ t:S2[i][1], p:S2[i][2] }); }
+    return { tot:t, voci:voci, n:voci.length };
+  }
+  // classe secondo la nota della Tab. S2; «valutati» = l'utente conferma che
+  // i fattori non segnati sono assenti
+  function classe(tot, n, valutati) {
+    var k;
+    if (tot < CLASSI.bassoSotto) k = "basso";
+    else if (tot === CLASSI.bassoSotto) k = "confine";
+    else if (tot <= CLASSI.intermedio[1]) k = "intermedio";
+    else k = "alto";
+    if (valutati) return { k:k, provv:false };
+    if (n === 0) return { k:null, perche:"nessuna casella segnata e fattori non confermati come valutati: non è lo stesso di «rischio basso»" };
+    if (k === "basso") return { k:null, perche:"sotto 20 punti, ma i fattori non segnati non sono confermati come assenti: la classe bassa si legge solo dopo la conferma" };
+    if (k === "alto") return { k:"alto", provv:false };   // i punti si sommano soltanto: non puo' scendere
+    return { k:k, provv:true };
+  }
+  function s3(ck) {
+    var pres = [], i;
+    for (i = 0; i < S3POS.length; i++) if (ck[S3POS[i][0]]) pres.push(S3POS[i][1]);
+    return { npos:pres.length, di:S3POS.length, pres:pres };
+  }
+  function seguito(decorso, cl) {
+    return {
+      ravvicinato: cl.k === "intermedio" || cl.k === "alto" || cl.k === "confine",
+      lungo: decorso === "incessante" || decorso === "ricorrente"
+    };
+  }
+
+  /* ═══ STATO E DISEGNO ═════════════════════════════════════════════════ */
+  function el(id) { return document.getElementById(id); }
+  function ckv(id) { var e = el(id); return !!(e && e.checked); }
+  function radio(n) { var e = document.querySelector('input[name="' + n + '"]:checked'); return e ? e.value : ""; }
+  function pgs(p) { return ' <span class="pg">' + p + "</span>"; }
+  function corPill(c, l) { var k = { "I":"c1", "IIa":"c2a", "IIb":"c2b", "III":"c3" }[c]; return '<span class="cor ' + k + '">' + c + "</span>" + (l ? ' <span class="cor ' + k + '" style="opacity:.85">' + l + "</span>" : ""); }
+  function nota(g, t) { return '<div class="nota ' + (g || "") + '">' + t + "</div>"; }
+  function chip(k, t) { return '<span class="cat ' + k + '">' + t + "</span>"; }
+  var S2P = "ESC 2025 · Suppl., Tab. S2, p. 5", S3P = "ESC 2025 · Suppl., Tab. S3, p. 5", P47 = "ESC 2025, § 7.2, p. 47";
+  var INV = nota("stop", "<b>Investigazionale, non validato.</b> La linea guida scrive che questi punteggi non sono stati validati né replicati in studi più ampi" + pgs(P47) + ", e che richiedono ulteriore validazione" + pgs("ESC 2025, § 4.4.3, p. 25") + ". La classe è un'informazione, non una decisione.");
+
+  function S() {
+    var c = {}, i;
+    for (i = 0; i < S2.length; i++) c[S2[i][0]] = ckv(S2[i][0]);
+    for (i = 0; i < S3POS.length; i++) c[S3POS[i][0]] = ckv(S3POS[i][0]);
+    return { ck:c, valutati:ckv("valutati"), decorso:radio("decorso") };
+  }
+
+  var LAB = {
+    basso:      ["k0", "rischio basso"],
+    intermedio: ["k2", "rischio intermedio"],
+    alto:       ["k4", "rischio alto"],
+    confine:    ["kx", "al confine (20)"]
+  };
+
+  function disegna() {
+    var s = S(), p = punteggio(s.ck), cl = classe(p.tot, p.n, s.valutati), r3 = s3(s.ck), fu = seguito(s.decorso, cl);
+    var i, chk = document.querySelectorAll(".chk");
+    for (i = 0; i < chk.length; i++) {
+      var inp = chk[i].querySelector("input");
+      var on = !!(inp && inp.checked);
+      if (on && (" " + chk[i].className + " ").indexOf(" on ") < 0) chk[i].className += " on";
+      if (!on) chk[i].className = chk[i].className.replace(/(^|\s)on(\s|$)/g, " ").replace(/\s+$/, "");
+    }
+
+    /* (a) · Tab. S2 */
+    el("subS2").innerHTML = (p.n || s.valutati) ? String(p.tot) : "—";
+    var h = "<h3>Punteggio della pericardite complicata — Suppl., Tab. S2, p. 5</h3>";
+    h += INV;
+    if (p.n === 0 && !s.valutati) {
+      h += '<div class="esito">' + chip("kx", "—") + '<span class="muted">' + cl.perche + "</span></div>";
+    } else {
+      h += '<div class="esito"><span class="big">' + p.tot + " punti</span>";
+      if (cl.k) h += chip(LAB[cl.k][0], LAB[cl.k][1] + (cl.provv ? " · provvisoria" : ""));
+      else h += chip("kx", "classe —");
+      h += "</div>";
+      if (!cl.k) h += '<div class="muted" style="font-size:13px">' + cl.perche + "</div>";
+      if (cl.k === "basso") h += nota("info", "Sotto 20 punti: <b>rischio basso, 21%</b> — la percentuale come la scrive la tabella" + pgs(S2P) + ", che non dice a che cosa si riferisca.");
+      if (cl.k === "intermedio") h += nota("info", "Fra 21 e 40 punti: <b>rischio intermedio</b>" + pgs(S2P) + ". Per questa classe la tabella non dà una percentuale.");
+      if (cl.k === "alto") h += nota("", "Oltre 40 punti: <b>rischio alto, 75%</b> — la percentuale come la scrive la tabella" + pgs(S2P) + ", che non dice a che cosa si riferisca.");
+      if (cl.k === "confine") h += nota("", "<b>20 punti esatti: la tabella non assegna una classe.</b> Scrive «meno di 20» per il basso e «21–40» per l'intermedio" + pgs(S2P) + ": il 20 resta fuori da entrambe. Lo strumento non sceglie. Vedi le incoerenze.");
+      if (cl.provv) h += nota("info", "<b>Classe provvisoria:</b> i fattori non segnati non sono confermati come valutati. I punti si sommano soltanto, quindi la classe può solo salire.");
+      if (p.n) {
+        var ord = p.voci.slice().sort(function (a, b) { return b.p - a.p; });
+        h += '<table class="tab"><tr><th>Fattore che contribuisce</th><th>Punti</th></tr>';
+        for (i = 0; i < ord.length; i++) h += "<tr><td>" + ord[i].t + '</td><td class="n">' + ord[i].p + "</td></tr>";
+        h += "</table>";
+      } else {
+        h += '<div class="muted" style="font-size:13px">Nessun fattore presente, confermato: 0 punti' + pgs(S2P) + ".</div>";
+      }
+    }
+    el("outPunti").innerHTML = h;
+
+    /* (b) · Tab. S3 */
+    el("subS3").innerHTML = r3.npos + " di " + r3.di;
+    var h3 = "<h3>Fattori di recidiva — Suppl., Tab. S3, p. 5</h3>";
+    h3 += nota("stop", "<b>Investigazionale, non validato</b>" + pgs(P47) + ". E qui <b>nessun punteggio</b>: la tabella elenca i fattori senza pesi né soglie, e lo strumento si limita a contarli.");
+    h3 += '<div class="esito"><span class="big">' + r3.npos + " di " + r3.di + "</span>" + chip("kx", "predittori «positivi» segnati") + "</div>";
+    if (r3.npos) h3 += '<div style="font-size:13.5px">Presenti: ' + r3.pres.join("; ") + pgs(S3P) + "</div>";
+    else h3 += '<div class="muted" style="font-size:13px">Nessuno segnato. Una casella vuota qui non dice che il fattore manchi: dice che non è stato segnato.</div>';
+    h3 += nota("info", "Che cosa voglia dire «positivo» e «negativo» la tabella non lo spiega" + pgs(S3P) + ". La lettura più probabile — più alto il valore, più alto il rischio per i positivi, più basso per i negativi — <b>non è scritta</b>: resta ambigua. Il numero di fattori presenti non è una classe di rischio.");
+    el("outS3").innerHTML = h3;
+
+    /* (c) · che cosa fare dopo */
+    var hf = "<h3>Che cosa fare dopo</h3>";
+    hf += INV;
+    if (fu.ravvicinato) {
+      hf += '<div class="passo att"><span class="ico">→</span><span class="tx"><b>Follow-up ravvicinato.</b> È ciò per cui la linea guida cita questi punteggi: riconoscere chi rischia una pericardite complicata o cronica e va seguito da vicino' + pgs(P47) + ", e chi può richiedere una terapia più intensa per dose e durata" + pgs("ESC 2025, § 4.4.3, p. 25") + ". <b>La fonte non dice</b> quanto ravvicinato, né lo lega a una classe: lo schema comune è nella Tab. 15 qui sotto.</span></div>";
+    } else if (cl.k === "basso") {
+      hf += '<div class="passo"><span class="ico">·</span><span class="tx">Classe bassa: la fonte non dice che cosa cambi rispetto al follow-up comune della Tab. 15' + pgs("ESC 2025, Tab. 15, p. 47") + ".</span></div>";
+    } else {
+      hf += '<div class="passo esc"><span class="ico">·</span><span class="tx">Classe non ancora leggibile: il follow-up legato al punteggio si dice dopo il passo 2.</span></div>';
+    }
+    if (fu.lungo) {
+      hf += '<div class="passo att"><span class="ico">→</span><span class="tx"><b>Follow-up a lungo termine</b> ' + corPill("I", "C") + " — pericardite " + s.decorso + ": per riconoscere una progressione e nuove complicanze" + pgs("ESC 2025, Rec. Table 15, p. 47") + ". Nel decorso incessante la costrizione può comparire in pochi mesi" + pgs(P47 + "; § 11.6, p. 60") + ".</span></div>";
+    } else if (s.decorso === "primo") {
+      hf += '<div class="passo"><span class="ico">·</span><span class="tx">Primo episodio: la raccomandazione sul follow-up a lungo termine riguarda la forma incessante o ricorrente' + pgs("ESC 2025, Rec. Table 15, p. 47") + ".</span></div>";
+    } else {
+      hf += '<div class="passo esc"><span class="ico">·</span><span class="tx">Decorso non indicato (passo 1): se è incessante o ricorrente vale il follow-up a lungo termine ' + corPill("I", "C") + pgs("ESC 2025, Rec. Table 15, p. 47") + ".</span></div>";
+    }
+    hf += '<div class="passo"><span class="ico">·</span><span class="tx"><b>Farmaci e scalo:</b> questo strumento non calcola dosi. Gli antinfiammatori per peso, fase e rene, con lo scalo del cortisone, stanno nello strumento degli antinfiammatori (<b>tool_antinfiammatori</b>, scheda 03) e nella Tab. 13–14' + pgs("ESC 2025, p. 40") + ".</span></div>";
+    el("outFU").innerHTML = hf;
+
+    /* incoerenze: tutte elencate, marcate quando toccano questo caso */
+    function inc(tocca, t) { return nota(tocca ? "" : "spenta", (tocca ? "<b>Tocca questo caso.</b> " : "") + t); }
+    var toccaVenti = (p.n > 0 || s.valutati) && p.tot === 20;
+    el("outInc").innerHTML =
+      inc(toccaVenti, "<b>I 20 punti.</b> La tabella scrive «meno di 20» per la classe bassa e «21–40» per l'intermedia" + pgs(S2P) + ": 20 non ha classe, e 20 è proprio il peso della sola febbre. Nell'articolo da cui viene il punteggio (Imazio 2021) la classe bassa è «20 o meno»: la ESC l'ha trascritta diversamente. Lo strumento mostra «al confine» e non sceglie.") +
+      inc(cl.k === "basso" || cl.k === "alto", "<b>Le percentuali.</b> 21% e 75% sono riportate senza dire di che cosa siano la frequenza" + pgs(S2P) + "; l'intermedia non ne ha. Nell'articolo originale sono la quota di pericarditi complicate nella coorte di validazione, su gruppi piccoli (4 su 19, 18 su 24). Lo strumento le riporta come scritte.") +
+      inc(r3.npos > 0, "<b>Positivi e negativi.</b> La Tab. S3 divide i predittori in «positivi» e «negativi» senza spiegarlo" + pgs(S3P) + ", e senza i punti del punteggio originale (Lazarou 2021). Lo strumento non ne fa un calcolo.") +
+      inc(false, "<b>Quanti punteggi.</b> Il testo parla di <b>almeno tre</b> punteggi e rimanda alle Tab. S2 e S3" + pgs(P47) + ", che ne riportano due: il terzo (rif. 348) non è nel supplementare. A p. 25 lo stesso discorso cita riferimenti in parte diversi" + pgs("ESC 2025, p. 25") + ".") +
+      inc(s.ck.f_nocolch && s.decorso === "primo", "<b>La colchicina «non usata prima».</b> Al primo episodio quasi nessuno l'ha presa: la tabella non dice se la voce valga anche lì" + pgs(S2P) + ". Lo strumento la conta se la segni.") +
+      inc(false, "<b>Complicata comprende la recidiva.</b> La definizione della Tab. S2 include le recidive e il decorso incessante" + pgs("ESC 2025 · Suppl., Tab. S2, nota a, p. 5") + ": le due tabelle non misurano cose separate.");
+
+    /* limiti */
+    var lim = [];
+    lim.push("I punteggi sono <b>investigazionali</b>: non validati né replicati in studi più ampi" + pgs(P47) + ".");
+    lim.push("La fonte non lega le classi a un'azione precisa: dice solo «follow-up ravvicinato»" + pgs(P47) + " e, a p. 25, terapia più intensa per dose e durata, senza dire quale.");
+    lim.push("Tab. S3: nessun peso, nessuna soglia — «frequenza cardiaca alta» e «collasso ridotto della cava» non hanno un valore" + pgs(S3P) + ". Il conteggio non è un punteggio.");
+    lim.push("Gli HR accanto ai fattori vengono dalla tabella" + pgs(S2P) + "; lo strumento non li usa nel calcolo, usa i punti.");
+    lim.push("Il percorso dei fattori del testo (passo 4) è un elenco citato: non entra in nessun conto.");
+    lim.push("Nessuna dose: farmaci e scalo nello strumento degli antinfiammatori o nella Tab. 13–14, p. 40.");
+    el("limiti").innerHTML = "<li>" + lim.join("</li><li>") + "</li>";
+
+    /* barra */
+    function bar(id, k, t) { var b = el(id); b.className = "cat " + k; b.innerHTML = t; }
+    bar("barPunti", "kx", (p.n || s.valutati) ? String(p.tot) : "—");
+    bar("barClasse", cl.k ? LAB[cl.k][0] : "kx", cl.k ? LAB[cl.k][1] + (cl.provv ? " (provv.)" : "") : "—");
+    bar("barS3", "kx", r3.npos + " di " + r3.di);
+  }
+
+  document.addEventListener("input", disegna);
+  document.addEventListener("change", disegna);
+  el("azzera").addEventListener("click", function () {
+    var ins = document.querySelectorAll("input");
+    for (var i = 0; i < ins.length; i++) {
+      if (ins[i].type === "checkbox" || ins[i].type === "radio") ins[i].checked = false;
+      else ins[i].value = "";
+    }
+    disegna();
+    window.scrollTo(0, 0);
+  });
+
+  window.COMPL_MOTORE = { punteggio:punteggio, classe:classe, s3:s3, seguito:seguito, S2:S2, CLASSI:CLASSI, S3POS:S3POS, S3NEG:S3NEG };
+  disegna();
+})();
+</script>
+<script data-iphone="web">
+// Solo da un indirizzo https, cioe' dalla pagina pubblicata: aperto come file
+// il tool non cerca ne' manifest ne' service worker, che accanto al file non
+// ci sono. Un errore qui non deve fermare niente: e' un di piu'.
+(function(){
+if(location.protocol!=="https:") return;
+try{
+  var t=document.getElementsByTagName("head")[0];
+  var m=document.createElement("link"); m.rel="manifest"; m.href="manifest.webmanifest";
+  var i=document.createElement("link"); i.rel="apple-touch-icon"; i.href="icona-180.png";
+  t.appendChild(m); t.appendChild(i);
+  if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js")["catch"](function(){});
+}catch(e){}
+})();
+</script>
+<script data-iphone="fine">document.documentElement.className+=" motore-ok";</script>
+</body>
+</html>
